@@ -1,0 +1,49 @@
+#wp-admin-bar-wp-logo>.ab-item .ab-icon {
+	background-image: url(../images/admin/logo_small.png);
+}
+#wpwrap {
+	background: #dedfdc;
+}
+
+#adminmenushadow, #adminmenuback {
+	background: rgb(53,75,94);
+	/*background: rgba(53, 75, 94, 0.8);*/
+	z-index: 0;
+}
+#adminmenuwrap {
+	background-color: #dcddd8;
+	border-color: transparent;
+}
+
+#adminmenu li.menu-top {
+	border-right: 5px solid rgb(53,75,94);
+}
+#adminmenu .wp-has-current-submenu .wp-submenu,
+ .no-js li.wp-has-current-submenu:hover .wp-submenu,
+  #adminmenu a.wp-has-current-submenu:focus+.wp-submenu,
+   #adminmenu .wp-has-current-submenu .wp-submenu.sub-open,
+    #adminmenu .wp-has-current-submenu.opensub .wp-submenu {
+  border-right: 5px solid rgb(53,75,94);
+  width: 140px;
+}
+#adminmenu li.wp-menu-separator {
+	background: #354b5e;
+	border-color: transparent;
+}
+#adminmenu div.separator {
+	border-color: #354b5e;
+}
+#adminmenu a.menu-top, #adminmenu .wp-submenu .wp-submenu-head {
+	border-top-color: #bebfbb;
+	border-bottom-color: #bebfbb;
+}
+
+/* Welcome Panel */
+
+div.welcome-panel-content, a.welcome-panel-close, p.welcome-panel-dismiss { display:none; }
+
+
+/* Editor */
+.wp_themeSkin iframe {
+  background: white !important;
+}
