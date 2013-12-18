@@ -1,7 +1,7 @@
 <?php get_header(); ?>
 
 <!-- Row for main content area -->
-<!-- single -->
+<!-- single-post -->
 	<div class="small-12 large-8 columns" role="main">
 	
 	<?php /* Start loop */ ?>

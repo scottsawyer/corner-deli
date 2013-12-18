@@ -6,7 +6,7 @@ add_action( 'init', 'ssc_init_meta_boxes', 9999 );
 add_action( 'init', 'ssc_modify_roles' );
 //add_action( 'init', 'ssc_register_menus' );
 add_action( 'init', 'ssc_scripts_method', 0 );
-add_action( 'init', 'ssc_custom_post_type');
+add_action( 'init', 'ssc_custom_post_type' );
 add_action( 'init', 'ssc_register_menus' );
 add_action( 'init', 'ssc_register_sidebars' );
 add_action( 'init', 'ssc_taxonomy_init', 0 );
@@ -107,16 +107,18 @@ function ssc_scripts_method() {
 	//wp_enqueue_script('modernizr', get_stylesheet_directory_uri() . '/js/modernizr.js', array());
 }	
 /**/
-
-
+/*
+ * Footer Text
+ */
 function ssc_admin_footer () {
 	global $ssc_options;
 	$options = $ssc_options;
-	//echo 'Some Text';
 	echo $options['admin']['footer']['text'];
 }
 /**/
-
+/*
+ * Custom Post Types
+ */
 function ssc_custom_post_type() {
 	global $ssc_options;
 	$options = $ssc_options;
@@ -154,8 +156,6 @@ function ssc_custom_post_type() {
 	  }
 	}
 }
-
-
 /*
  * registers menus
  */
@@ -297,10 +297,8 @@ function ssc_dashboard_widget_function() {
 	$form .=    '<textarea name="' . $namespace . '-message" id="' . $namespace . '-message" class="widefat"></textarea></p>';
 	$form .=    '<input type="submit" value="' . __( 'Submit Support Request', 'text_domain' ) . '" class="button button-primary">';
 	$form .=    '</form>';
-	    /**/
-	    
+	    /**/    
 	echo '<div class="' . $namespace . '"><ul><li>';
-	  
   if ( array_key_exists( $namespace.'-form', $_POST ) && $_POST[$namespace . '-form'] == $namespace ) {
     if ( check_admin_referer( 'support_request' ) ) {
     	$to = get_blog_option( 1, 'admin_email' );
@@ -319,14 +317,10 @@ function ssc_dashboard_widget_function() {
     		echo $output;
     	}
     }
-
   }
   else {
   	echo $form;
   }
-  /**/
-
-	//do_shortcode( '[contact-form-7 id="98" title="Support"]' );
 	echo '';  
 	echo '</li></ul></div>';
 }
@@ -343,10 +337,14 @@ function ssc_dashboard_widget_brand_news() {
 		);
 	echo '<div class="ssc_admin_dashboard_widget">';
 	echo wp_widget_rss_output( $feed );
-	//echo '<h3>Test RSS</h3>';
 	echo '</div>';
 }
-
+/* 
+ * Debug Hooks
+ */
+function ssc_dashboard_widget_debug() {
+	list_hooked_functions();
+}
 
 
 function prefix_dashboard_widget() {
@@ -393,12 +391,9 @@ function prefix_dashboard_widget_handle() {
         # save update
         update_option( 'my_dashboard_widget_options', $widget_options );
     }
-
     # set defaults  
     if( !isset( $widget_options['feature_post'] ) )
         $widget_options['feature_post'] = '';
-
-
     echo "<p><strong>Available Pages</strong></p>
     <div class='feature_post_class_wrap'>
         <label>Title</label>";
@@ -420,6 +415,7 @@ function ssc_add_dashboard_widgets() {
         'prefix_dashboard_widget_handle'
     );
 	wp_add_dashboard_widget( 'ssc_dashboard_widget_brand_news', 'Brand News', 'ssc_dashboard_widget_brand_news' );
+	wp_add_dashboard_widget( 'ssc_dashboard_widget_debug', 'Available Hooks', 'ssc_dashboard_widget_debug');
 }
 
 // Custom WordPress Admin Color Scheme
@@ -427,150 +423,30 @@ function admin_css() {
 	echo '<link rel="stylesheet" href="' . get_stylesheet_directory_uri() . '/css/admin.css" type="text/css" media="all" />';
 	echo '<link rel="stylesheet" href="' . get_stylesheet_directory_uri() . '/js/jonthornton-jquery-timepicker-83399f0/jquery.timepicker.css" type="text/css" media="all" />';
 }
-/*
-// Render site settings form
 
-function ssc_admin_settings_api_init() {
-	global $ssc_options;
-	$options = $ssc_options;
-	foreach ( $options['settings'] as $settings_group ) {
-			$group_name = $settings_group['group_name'];
-			$group_title = $settings_group['group_title'];
-			$group_section = $settings_group['group_section'];
-			add_settings_section(
-				'ssc_admin_' . $group_name . '_settings_section',
-				$group_title,
-				'ssc_admin_settings_section_callback',
-				$group_section
-				);
-			
-			foreach ($settings_group['group_fields'] as $fields) {
-				$args = array();
-				$args = $fields;
-				$args['group_name'] = $group_name;
-				$args['group_section'] = $group_section;
-				add_settings_field(
-					'ssc_admin_' . $group_name . '_settings_' . $fields['name'],
-					$fields['title'],
-					'ssc_admin_settings_fields_callback',
-					$group_section,
-					'ssc_admin_' . $group_name . '_settings_section',
-					$args
-					);
-				register_setting( $group_section, 'ssc_admin_' . $group_name . '_settings_' . $fields['name'] );
-			}
-	}
+function list_hooked_functions($tag=false){
+ global $wp_filter;
+ if ($tag) {
+  $hook[$tag]=$wp_filter[$tag];
+  if (!is_array($hook[$tag])) {
+  trigger_error("Nothing found for '$tag' hook", E_USER_WARNING);
+  return;
+  }
+ }
+ else {
+  $hook=$wp_filter;
+  ksort($hook);
+ }
+ echo '<pre>';
+ foreach($hook as $tag => $priority){
+  echo "<br />&gt;&gt;&gt;&gt;&gt;\t<strong>$tag</strong><br />";
+  ksort($priority);
+  foreach($priority as $priority => $function){
+  echo $priority;
+  foreach($function as $name => $properties) echo "\t$name<br />";
+  }
+ }
+ echo '</pre>';
+ return;
 }
-/**/
-/*
-function ssc_admin_settings_section_callback( $section_passed ) {
-
-  echo '<p>' . $section_passed['title'] . '</p>';
-
-}
-function ssc_admin_settings_fields_callback( array $args ) {
-
-  $field_name = 'ssc_admin_' . $args['group_name'] . '_settings_' .$args['name'];
-	if ( 'text' == $args['type'] || 'time' == $args['type'] ){
-		echo '<input type="text" name="' . $field_name . '" ';
-		if ( get_option( $field_name ) ) {
-			echo 'value="' . get_option( $field_name ) . '" ';
-		}
-		if ( 'time' == $args['type'] ) {
-			echo 'class="time" ';
-		}
-		echo '/>';
-	}
-	if ( 'select' == $args['type'] ) {
-		$options = array();
-		echo '<select name="' . $field_name . '" >';
-		if ( 'us_state_abbrevs_names' == $args['options'] ) {
-			$options = ssc_us_states();
-		}
-		elseif ( is_array( $args['options'] ) ) {
-			$options = $args['options'];
-		}
-		foreach ( $options as $key => $value ) {
-			echo '<option value="' .$key . '" ';
-			if ( get_option( $field_name ) == $key ) {
-				echo 'selected';
-			}
-			echo '>' . $value . '</option>';
-		}
-		echo '</select>';
-	}
-}
-
-/**/
-/*
-function ssc_us_states () {
-// From https://www.usps.com/send/official-abbreviations.htm 
-
-$us_state_abbrevs_names = array(
-	'AL'=>'ALABAMA',
-	'AK'=>'ALASKA',
-	'AS'=>'AMERICAN SAMOA',
-	'AZ'=>'ARIZONA',
-	'AR'=>'ARKANSAS',
-	'CA'=>'CALIFORNIA',
-	'CO'=>'COLORADO',
-	'CT'=>'CONNECTICUT',
-	'DE'=>'DELAWARE',
-	'DC'=>'DISTRICT OF COLUMBIA',
-	'FM'=>'FEDERATED STATES OF MICRONESIA',
-	'FL'=>'FLORIDA',
-	'GA'=>'GEORGIA',
-	'GU'=>'GUAM GU',
-	'HI'=>'HAWAII',
-	'ID'=>'IDAHO',
-	'IL'=>'ILLINOIS',
-	'IN'=>'INDIANA',
-	'IA'=>'IOWA',
-	'KS'=>'KANSAS',
-	'KY'=>'KENTUCKY',
-	'LA'=>'LOUISIANA',
-	'ME'=>'MAINE',
-	'MH'=>'MARSHALL ISLANDS',
-	'MD'=>'MARYLAND',
-	'MA'=>'MASSACHUSETTS',
-	'MI'=>'MICHIGAN',
-	'MN'=>'MINNESOTA',
-	'MS'=>'MISSISSIPPI',
-	'MO'=>'MISSOURI',
-	'MT'=>'MONTANA',
-	'NE'=>'NEBRASKA',
-	'NV'=>'NEVADA',
-	'NH'=>'NEW HAMPSHIRE',
-	'NJ'=>'NEW JERSEY',
-	'NM'=>'NEW MEXICO',
-	'NY'=>'NEW YORK',
-	'NC'=>'NORTH CAROLINA',
-	'ND'=>'NORTH DAKOTA',
-	'MP'=>'NORTHERN MARIANA ISLANDS',
-	'OH'=>'OHIO',
-	'OK'=>'OKLAHOMA',
-	'OR'=>'OREGON',
-	'PW'=>'PALAU',
-	'PA'=>'PENNSYLVANIA',
-	'PR'=>'PUERTO RICO',
-	'RI'=>'RHODE ISLAND',
-	'SC'=>'SOUTH CAROLINA',
-	'SD'=>'SOUTH DAKOTA',
-	'TN'=>'TENNESSEE',
-	'TX'=>'TEXAS',
-	'UT'=>'UTAH',
-	'VT'=>'VERMONT',
-	'VI'=>'VIRGIN ISLANDS',
-	'VA'=>'VIRGINIA',
-	'WA'=>'WASHINGTON',
-	'WV'=>'WEST VIRGINIA',
-	'WI'=>'WISCONSIN',
-	'WY'=>'WYOMING',
-	'AE'=>'ARMED FORCES AFRICA \ CANADA \ EUROPE \ MIDDLE EAST',
-	'AA'=>'ARMED FORCES AMERICA (EXCEPT CANADA)',
-	'AP'=>'ARMED FORCES PACIFIC'
-);
-return $us_state_abbrevs_names;
-}
-*/
 ?>

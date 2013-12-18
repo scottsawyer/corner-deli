@@ -7,12 +7,14 @@ $ssc_options = array(
   'permissions' => array(
     'administrator' => array(
       'remove' => array(
+        /*
         'export',
         'import',
         'switch_themes',
         'delete_plugins',
         'delete_others_pages',
         'edit_theme_options',
+        /**/
         ),
       ),
     ),
@@ -68,8 +70,7 @@ $ssc_options = array(
       'capability_type' => array( 'menu_item', 'menu_items' ),
       'map_meta_cap' => true,
       ),
-    ),
-  
+    ), 
   'metaboxes' => array(
     array( 
       'id' => 'menu_item_details',
@@ -101,7 +102,6 @@ $ssc_options = array(
         ),
       ),
     ),
-/**/
   'taxonomies' => array(
     array(
       'machine_name' => 'menu_category',
@@ -138,12 +138,13 @@ $ssc_options = array(
   /*
    * Settings fields 
   /**/
+  /*
   'settings' => array(
     array(
       'group_name' => 'location',
       'group_title' => 'Location',
       'group_description' => 'Enter the location information.',
-      'group_section' => 'general',
+      'group_section' => 'location',
       'group_fields' => array(
         array(
           'name' => 'phone',
@@ -171,13 +172,23 @@ $ssc_options = array(
           'type' => 'select',
           'options' => 'us_state_abbrevs_names',
           ),
+        array(
+          'name' => 'lat',
+          'title' => 'Latitude',
+          'type' => 'hidden',
+          ),
+        array(
+          'name' => 'lon',
+          'title' => 'Longitude',
+          'type' => 'hidden',
+          ),
         ),
       ),
     array(
       'group_name' => 'socialmedia',
       'group_title' => 'Social Media',
       'group_description' => 'Add social media links.',
-      'group_section' => 'general',
+      'group_section' => 'location',
       'group_fields' => array(
         array(
           'name' => 'facebook',
@@ -290,6 +301,7 @@ $ssc_options = array(
         ),
       ),
     ),
+/**/
   'admin' => array(
     'footer' => array(
       'text' => '&copy 2005 - '. date('Y'). ' Scott Sawyer Consulting.  All rights reserved.',

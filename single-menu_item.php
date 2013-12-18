@@ -1,6 +1,7 @@
 <?php get_header(); ?>
 
 <!-- Row for main content area -->
+<!-- single menu_item -->
 	<div class="small-12 large-8 columns" role="main">
 	
 	<?php /* Start loop */ ?>
@@ -37,6 +38,8 @@
 	<?php endwhile; // End the loop ?>
 
 	</div>
-	<?php dynamic_sidebar("Menu Item Sidebar"); ?>
+	<article class="small-12 large-4 columns">
+  	<?php dynamic_sidebar("Menu Item Sidebar"); ?>
+  </article>
 		
 <?php get_footer(); ?>
